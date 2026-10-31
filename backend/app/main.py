@@ -50,8 +50,8 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="Enterprise Documentation Q&A Assistant",
-    description="RAG-powered enterprise knowledge assistant with grounded answers, citations, and conflict detection.",
+    title="Doomsday Enterprise — Knowledge & Documentation AI",
+    description="RAG-powered knowledge assistant for Doomsday Enterprise by Team Doomsday. Features grounded answers, verifiable citations, policy conflict detection, and prompt injection defense.",
     version="1.0.0",
     lifespan=lifespan,
     docs_url="/docs",
