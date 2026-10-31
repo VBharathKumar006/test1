@@ -4,7 +4,12 @@ import {
   AlertCircle,
   CheckCircle2,
   FileType,
-  ArrowRight
+  ArrowRight,
+  FileText,
+  X,
+  Shield,
+  Layers,
+  Sparkles
 } from 'lucide-react';
 import { uploadDocument } from '../services/api';
 
@@ -45,6 +50,10 @@ export const UploadPage: React.FC<{ onUploadSuccess: () => void }> = ({ onUpload
     }
   };
 
+  const removeFile = (index: number) => {
+    setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
+  };
+
   const handleUpload = async () => {
     if (selectedFiles.length === 0 || uploading) return;
 
@@ -81,194 +90,260 @@ export const UploadPage: React.FC<{ onUploadSuccess: () => void }> = ({ onUpload
     setUploadResults(results);
     setUploading(false);
     setSelectedFiles([]);
-    onUploadSuccess();
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6 font-sans">
-      <div className="border-b border-dark-800 pb-4">
-        <div className="text-[11px] font-mono text-accent-orange font-bold uppercase tracking-wider mb-1">
-          Ingestion Terminal // FR-01 & FR-02
-        </div>
-        <h2 className="text-2xl font-black uppercase tracking-tight text-white">Ingest Enterprise Documents</h2>
-        <p className="text-xs text-neutral-400">
-          Upload PDF, HTML, Markdown (.md), or Plain Text (.txt) files into the Doomsday Enterprise repository
+    <div className="max-w-4xl mx-auto space-y-8 font-sans">
+      {/* Header */}
+      <div className="border-b border-app-border pb-5">
+        <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-white">
+          Bring your enterprise knowledge together.
+        </h1>
+        <p className="text-sm text-slate-400 mt-1">
+          Upload PDF, HTML, Markdown and TXT documents.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Left 2 Cols: Drag & Drop Zone */}
-        <div className="md:col-span-2 space-y-4">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+        {/* Left Column: Drag & Drop Zone (7 cols) */}
+        <div className="md:col-span-7 space-y-4">
           <div
             onDragEnter={handleDrag}
             onDragLeave={handleDrag}
             onDragOver={handleDrag}
             onDrop={handleDrop}
-            className={`border border-dashed rounded-lg p-8 text-center transition-all flex flex-col items-center justify-center min-h-[260px] ${
+            className={`relative rounded-2xl border-2 border-dashed p-8 sm:p-10 text-center transition-all flex flex-col items-center justify-center min-h-[260px] ${
               dragActive
-                ? 'border-accent-orange bg-accent-orange/10'
-                : 'border-dark-800 bg-dark-900 hover:border-neutral-700'
+                ? 'border-brand-primary bg-brand-primary/10 shadow-glow-primary'
+                : 'border-app-border bg-app-surface hover:border-brand-primary/40'
             }`}
           >
-            <div className="h-12 w-12 rounded bg-black border border-dark-800 text-accent-orange flex items-center justify-center mb-3">
+            <input
+              type="file"
+              multiple
+              accept=".pdf,.html,.htm,.md,.markdown,.txt"
+              onChange={handleFileChange}
+              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+              disabled={uploading}
+            />
+
+            <div className="h-12 w-12 rounded-2xl bg-brand-primary/15 border border-brand-primary/30 text-brand-primary flex items-center justify-center mb-4">
               <UploadCloud className="h-6 w-6" />
             </div>
-            <h4 className="text-sm font-bold text-white uppercase tracking-wider font-mono">
-              Drag & Drop Files, or{' '}
-              <label className="text-accent-orange hover:underline cursor-pointer">
-                browse disk
-                <input
-                  type="file"
-                  multiple
-                  accept=".pdf,.html,.htm,.md,.txt"
-                  onChange={handleFileChange}
-                  className="hidden"
-                />
-              </label>
-            </h4>
-            <p className="text-xs text-neutral-500 font-mono mt-1">
-              Supported: PDF, HTML, MD, TXT (Maximum 50MB per file)
+
+            <h3 className="text-sm font-semibold text-white">
+              Drop files here or click to browse
+            </h3>
+            <p className="text-xs text-slate-400 mt-1 max-w-xs">
+              Supports PDF, HTML, Markdown (.md), and TXT files up to 25MB.
             </p>
 
-            {/* Selected files list */}
-            {selectedFiles.length > 0 && (
-              <div className="mt-4 w-full text-left bg-black p-3.5 rounded border border-dark-800 text-xs space-y-2 font-mono">
-                <div className="font-bold text-white flex items-center justify-between uppercase">
-                  <span>Selected Queue ({selectedFiles.length}):</span>
-                  <button
-                    onClick={() => setSelectedFiles([])}
-                    className="text-accent-red hover:underline text-[11px]"
-                  >
-                    Clear All
-                  </button>
-                </div>
-                <div className="max-h-32 overflow-y-auto space-y-1">
-                  {selectedFiles.map((f, i) => (
-                    <div key={i} className="flex items-center justify-between text-neutral-400 text-[11px]">
-                      <span className="truncate max-w-[280px] text-neutral-200">{f.name}</span>
-                      <span className="text-neutral-500">{(f.size / 1024).toFixed(0)} KB</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+            <div className="flex flex-wrap items-center justify-center gap-1.5 mt-5">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-status-errorBg text-status-error border border-status-error/30">
+                .pdf
+              </span>
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-status-warningBg text-status-warning border border-status-warning/30">
+                .html
+              </span>
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-brand-primary/15 text-brand-highlight border border-brand-primary/30">
+                .md
+              </span>
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-app-surface2 text-slate-300 border border-app-border">
+                .txt
+              </span>
+            </div>
           </div>
 
-          {/* Upload Progress & Results */}
-          {uploadResults.length > 0 && (
-            <div className="p-4 rounded bg-dark-900 border border-dark-800 space-y-2 text-xs font-mono">
-              <div className="font-bold uppercase tracking-wider text-white">Ingestion Output:</div>
-              <div className="space-y-1.5">
-                {uploadResults.map((r, i) => (
-                  <div
-                    key={i}
-                    className={`p-2.5 rounded flex items-start gap-2.5 border ${
-                      r.success
-                        ? 'bg-black border-neutral-700 text-white'
-                        : 'bg-accent-red/10 border-accent-red/40 text-accent-red'
-                    }`}
-                  >
-                    {r.success ? (
-                      <CheckCircle2 className="h-4 w-4 text-accent-orange flex-shrink-0 mt-0.5" />
-                    ) : (
-                      <AlertCircle className="h-4 w-4 text-accent-red flex-shrink-0 mt-0.5" />
-                    )}
-                    <div>
-                      <div className="font-bold">{r.name}</div>
-                      <div className="text-[11px] opacity-90 font-sans">{r.message}</div>
+          {/* Selected Files Staging List */}
+          {selectedFiles.length > 0 && (
+            <div className="rounded-xl bg-app-surface border border-app-border p-4 space-y-2">
+              <div className="text-xs font-semibold text-slate-200 flex items-center justify-between">
+                <span>Staged for Ingestion ({selectedFiles.length})</span>
+                <span className="text-[11px] text-slate-400 font-mono">
+                  {(selectedFiles.reduce((acc, f) => acc + f.size, 0) / 1024).toFixed(1)} KB
+                </span>
+              </div>
+              <div className="divide-y divide-app-borderSubtle max-h-48 overflow-y-auto">
+                {selectedFiles.map((file, idx) => (
+                  <div key={idx} className="py-2 flex items-center justify-between text-xs">
+                    <div className="flex items-center gap-2 truncate">
+                      <FileText className="h-3.5 w-3.5 text-brand-primary flex-shrink-0" />
+                      <span className="text-slate-200 truncate">{file.name}</span>
                     </div>
+                    <button
+                      onClick={() => removeFile(idx)}
+                      disabled={uploading}
+                      className="text-slate-400 hover:text-status-error p-1 transition-colors"
+                    >
+                      <X className="h-3.5 w-3.5" />
+                    </button>
                   </div>
                 ))}
               </div>
             </div>
           )}
+
+          {/* Results Feedback */}
+          {uploadResults.length > 0 && (
+            <div className="rounded-xl bg-app-surface border border-app-border p-4 space-y-2.5">
+              <div className="text-xs font-semibold text-white">Ingestion Results</div>
+              <div className="space-y-1.5">
+                {uploadResults.map((res, i) => (
+                  <div
+                    key={i}
+                    className={`p-3 rounded-lg text-xs flex items-start gap-2.5 border ${
+                      res.success
+                        ? 'bg-status-successBg border-status-success/30 text-status-success'
+                        : 'bg-status-errorBg border-status-error/30 text-status-error'
+                    }`}
+                  >
+                    {res.success ? (
+                      <CheckCircle2 className="h-4 w-4 flex-shrink-0 mt-0.5" />
+                    ) : (
+                      <AlertCircle className="h-4 w-4 flex-shrink-0 mt-0.5" />
+                    )}
+                    <div>
+                      <div className="font-semibold">{res.name}</div>
+                      <div className="text-[11px] opacity-90 mt-0.5">{res.message}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <button
+                onClick={onUploadSuccess}
+                className="w-full mt-2 py-2 rounded-lg bg-app-surface2 hover:bg-app-elevated border border-app-border text-xs text-slate-200 font-medium transition-colors"
+              >
+                Go to Document Library
+              </button>
+            </div>
+          )}
         </div>
 
-        {/* Right Col: Enterprise Metadata Form */}
-        <div className="p-5 rounded bg-dark-900 border border-dark-800 space-y-4 text-xs font-mono">
-          <div className="border-b border-dark-800 pb-2">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-white flex items-center gap-1.5">
-              <FileType className="h-4 w-4 text-accent-orange" />
-              Enterprise Metadata Tags
-            </h3>
-            <p className="text-[11px] text-neutral-400 font-sans mt-0.5">
-              Metadata prevents scope mismatch across departments
-            </p>
-          </div>
+        {/* Right Column: Metadata Form (5 cols) */}
+        <div className="md:col-span-5 space-y-5">
+          <div className="rounded-2xl bg-app-surface border border-app-border p-5 space-y-4">
+            <div>
+              <h2 className="text-sm font-semibold text-white">Enterprise Metadata</h2>
+              <p className="text-xs text-slate-400 mt-0.5">
+                Attach governance attributes to preserve provenance during RAG retrieval
+              </p>
+            </div>
 
-          {/* Department */}
-          <div className="space-y-1">
-            <label className="text-neutral-300 font-bold uppercase text-[10px]">Department Scope</label>
-            <select
-              value={department}
-              onChange={(e) => setDepartment(e.target.value)}
-              className="w-full bg-black border border-dark-800 rounded p-2 text-neutral-200 text-xs focus:outline-none focus:border-accent-orange"
+            <div className="space-y-3.5 text-xs">
+              <div>
+                <label className="block text-slate-300 font-medium mb-1.5">
+                  Department
+                </label>
+                <select
+                  value={department}
+                  onChange={(e) => setDepartment(e.target.value)}
+                  className="w-full px-3 py-2 rounded-lg bg-app-surface2 border border-app-border text-slate-200 focus:outline-none focus:border-brand-primary/50"
+                >
+                  <option value="HR">Human Resources (HR)</option>
+                  <option value="IT">Information Technology (IT)</option>
+                  <option value="Finance">Finance & Billing</option>
+                  <option value="Engineering">Engineering & DevOps</option>
+                  <option value="Sales">Sales & Operations</option>
+                  <option value="Legal">Legal & Compliance</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-slate-300 font-medium mb-1.5">
+                  Team (Optional)
+                </label>
+                <input
+                  type="text"
+                  value={team}
+                  onChange={(e) => setTeam(e.target.value)}
+                  placeholder="e.g. Infrastructure, Backend, Security"
+                  className="w-full px-3 py-2 rounded-lg bg-app-surface2 border border-app-border text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-brand-primary/50"
+                >
+                </input>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-slate-300 font-medium mb-1.5">
+                    Version
+                  </label>
+                  <input
+                    type="text"
+                    value={version}
+                    onChange={(e) => setVersion(e.target.value)}
+                    placeholder="v1.0"
+                    className="w-full px-3 py-2 rounded-lg bg-app-surface2 border border-app-border text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-brand-primary/50 font-mono"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-slate-300 font-medium mb-1.5">
+                    Effective Date
+                  </label>
+                  <input
+                    type="date"
+                    value={effectiveDate}
+                    onChange={(e) => setEffectiveDate(e.target.value)}
+                    className="w-full px-3 py-2 rounded-lg bg-app-surface2 border border-app-border text-slate-200 focus:outline-none focus:border-brand-primary/50"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-slate-300 font-medium mb-1.5">
+                  Access Scope
+                </label>
+                <select
+                  value={accessScope}
+                  onChange={(e) => setAccessScope(e.target.value)}
+                  className="w-full px-3 py-2 rounded-lg bg-app-surface2 border border-app-border text-slate-200 focus:outline-none focus:border-brand-primary/50"
+                >
+                  <option value="internal">Internal (All Employees)</option>
+                  <option value="restricted">Restricted (Department Only)</option>
+                  <option value="public">Public</option>
+                </select>
+              </div>
+            </div>
+
+            <button
+              onClick={handleUpload}
+              disabled={selectedFiles.length === 0 || uploading}
+              className="w-full mt-4 py-2.5 rounded-xl bg-gradient-to-r from-brand-primary to-brand-secondary hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs font-semibold flex items-center justify-center gap-2 transition-all shadow-glow-subtle"
             >
-              <option value="HR">HR (Human Resources)</option>
-              <option value="IT">IT & Security</option>
-              <option value="Finance">Finance & Billing</option>
-              <option value="Engineering">Engineering</option>
-              <option value="Sales">Sales & Operations</option>
-            </select>
+              {uploading ? (
+                <>
+                  <Sparkles className="h-4 w-4 animate-spin" />
+                  <span>Chunking & Indexing...</span>
+                </>
+              ) : (
+                <>
+                  <span>Ingest {selectedFiles.length > 0 ? `${selectedFiles.length} Document(s)` : 'Documents'}</span>
+                  <ArrowRight className="h-4 w-4" />
+                </>
+              )}
+            </button>
           </div>
 
-          {/* Team */}
-          <div className="space-y-1">
-            <label className="text-neutral-300 font-bold uppercase text-[10px]">Team Scope (Optional)</label>
-            <input
-              type="text"
-              value={team}
-              onChange={(e) => setTeam(e.target.value)}
-              placeholder="e.g. Core Engineering"
-              className="w-full bg-black border border-dark-800 rounded p-2 text-neutral-200 text-xs focus:outline-none focus:border-accent-orange"
-            />
+          {/* Ingestion Steps Explainer */}
+          <div className="rounded-xl bg-app-surface/60 border border-app-border p-4 space-y-2.5 text-xs">
+            <div className="text-[11px] font-mono text-slate-400 uppercase tracking-wider font-semibold">
+              Pipeline Guarantees
+            </div>
+            <div className="space-y-1.5 text-slate-400">
+              <div className="flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-brand-primary" />
+                <span>Deterministic Heading-Aware Chunking</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-brand-primary" />
+                <span>Dual FAISS Vector + BM25Okapi Indexing</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-brand-primary" />
+                <span>Strict Provenance Metadata Persistence</span>
+              </div>
+            </div>
           </div>
-
-          {/* Version */}
-          <div className="space-y-1">
-            <label className="text-neutral-300 font-bold uppercase text-[10px]">Policy Version</label>
-            <input
-              type="text"
-              value={version}
-              onChange={(e) => setVersion(e.target.value)}
-              placeholder="v2.1"
-              className="w-full bg-black border border-dark-800 rounded p-2 text-accent-orange font-bold text-xs focus:outline-none focus:border-accent-orange"
-            />
-          </div>
-
-          {/* Effective Date */}
-          <div className="space-y-1">
-            <label className="text-neutral-300 font-bold uppercase text-[10px]">Effective Date</label>
-            <input
-              type="date"
-              value={effectiveDate}
-              onChange={(e) => setEffectiveDate(e.target.value)}
-              className="w-full bg-black border border-dark-800 rounded p-2 text-neutral-200 text-xs focus:outline-none focus:border-accent-orange"
-            />
-          </div>
-
-          {/* Access Scope */}
-          <div className="space-y-1">
-            <label className="text-neutral-300 font-bold uppercase text-[10px]">Access Scope</label>
-            <select
-              value={accessScope}
-              onChange={(e) => setAccessScope(e.target.value)}
-              className="w-full bg-black border border-dark-800 rounded p-2 text-neutral-200 text-xs focus:outline-none focus:border-accent-orange"
-            >
-              <option value="internal">Internal (All Employees)</option>
-              <option value="public">Public</option>
-              <option value="restricted">Restricted (Privileged)</option>
-            </select>
-          </div>
-
-          <button
-            onClick={handleUpload}
-            disabled={selectedFiles.length === 0 || uploading}
-            className="w-full py-2.5 rounded bg-accent-orange hover:bg-accent-orange-hover disabled:bg-neutral-800 disabled:text-neutral-600 text-black font-black uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow"
-          >
-            {uploading ? 'INGESTING & EMBEDDING...' : `COMMIT ${selectedFiles.length} FILE(S)`}
-            <ArrowRight className="h-4 w-4 stroke-[2.5]" />
-          </button>
         </div>
       </div>
     </div>

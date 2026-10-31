@@ -10,7 +10,11 @@ import {
   Layers,
   CheckCircle2,
   AlertCircle,
-  Clock
+  Clock,
+  UploadCloud,
+  FileCode,
+  FileSpreadsheet,
+  FileType
 } from 'lucide-react';
 import { fetchDocuments, deleteDocument, reindexDocument, fetchDocumentChunks } from '../services/api';
 import { DocumentItem, DocumentChunk } from '../types';
@@ -51,7 +55,7 @@ export const DocumentsPage: React.FC = () => {
   }, [deptFilter, statusFilter, typeFilter]);
 
   const handleDelete = async (id: string, name: string) => {
-    if (!window.confirm(`Delete "${name}" and purge all vector embeddings?`)) return;
+    if (!window.confirm(`Delete "${name}" and remove all indexed vector embeddings?`)) return;
     try {
       await deleteDocument(id);
       await loadDocuments();
@@ -88,181 +92,219 @@ export const DocumentsPage: React.FC = () => {
     (doc.document_title && doc.document_title.toLowerCase().includes(search.toLowerCase()))
   );
 
+  const indexedCount = documents.filter((d) => d.processing_status === 'indexed').length;
+  const processingCount = documents.filter((d) => d.processing_status === 'processing').length;
+  const failedCount = documents.filter((d) => d.processing_status === 'failed').length;
+
   return (
-    <div className="max-w-7xl mx-auto space-y-5 font-sans">
-      {/* Title & Filters */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-dark-800 pb-4">
+    <div className="max-w-7xl mx-auto space-y-6 font-sans">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-app-border pb-5">
         <div>
-          <div className="text-[11px] font-mono text-accent-orange font-bold uppercase tracking-wider mb-1">
-            Repository Management // FR-01
-          </div>
-          <h2 className="text-2xl font-black uppercase tracking-tight text-white">Doomsday Document Library</h2>
-          <p className="text-xs text-neutral-400">
-            Multi-format policy repository, version index tracking, and vector partitions
+          <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-white">
+            Knowledge Library
+          </h1>
+          <p className="text-sm text-slate-400 mt-1">
+            Manage and explore your indexed enterprise knowledge repository.
           </p>
         </div>
 
-        {/* Search & Refresh */}
-        <div className="flex items-center gap-2.5">
-          <div className="relative">
-            <Search className="h-4 w-4 absolute left-3 top-2.5 text-neutral-500" />
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search filename or department..."
-              className="pl-9 pr-3 py-1.5 rounded bg-dark-900 border border-dark-800 text-xs text-neutral-200 placeholder:text-neutral-500 focus:outline-none focus:border-accent-orange w-64 font-mono"
-            />
+        <button
+          onClick={loadDocuments}
+          disabled={loading}
+          className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-app-surface hover:bg-app-surface2 border border-app-border text-xs font-medium text-slate-300 transition-colors self-start sm:self-auto"
+        >
+          <RefreshCw className={`h-3.5 w-3.5 ${loading ? 'animate-spin text-brand-primary' : ''}`} />
+          <span>Refresh Library</span>
+        </button>
+      </div>
+
+      {/* Top 4 KPI Metric Summary */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+        <div className="p-4 rounded-xl bg-app-surface border border-app-border">
+          <div className="text-xs text-slate-400 font-medium">Total Documents</div>
+          <div className="text-2xl font-semibold text-white mt-1">{total}</div>
+        </div>
+        <div className="p-4 rounded-xl bg-app-surface border border-app-border">
+          <div className="text-xs text-status-success font-medium flex items-center gap-1.5">
+            <span className="h-2 w-2 rounded-full bg-status-success" />
+            Indexed
           </div>
-          <button
-            onClick={loadDocuments}
-            disabled={loading}
-            className="p-2 rounded bg-dark-850 hover:bg-neutral-800 border border-dark-800 text-neutral-200 transition-colors"
-          >
-            <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin text-accent-orange' : ''}`} />
-          </button>
+          <div className="text-2xl font-semibold text-white mt-1">{indexedCount}</div>
+        </div>
+        <div className="p-4 rounded-xl bg-app-surface border border-app-border">
+          <div className="text-xs text-brand-highlight font-medium flex items-center gap-1.5">
+            <span className="h-2 w-2 rounded-full bg-brand-primary" />
+            Processing
+          </div>
+          <div className="text-2xl font-semibold text-white mt-1">{processingCount}</div>
+        </div>
+        <div className="p-4 rounded-xl bg-app-surface border border-app-border">
+          <div className="text-xs text-status-error font-medium flex items-center gap-1.5">
+            <span className="h-2 w-2 rounded-full bg-status-error" />
+            Failed
+          </div>
+          <div className="text-2xl font-semibold text-white mt-1">{failedCount}</div>
         </div>
       </div>
 
-      {/* Filter Badges */}
-      <div className="flex flex-wrap items-center gap-3 text-xs bg-dark-900 p-3 rounded border border-dark-800">
-        <span className="text-neutral-400 font-mono font-bold flex items-center gap-1.5 uppercase text-[11px]">
-          <Filter className="h-3.5 w-3.5 text-accent-orange" />
-          Filter:
-        </span>
+      {/* Toolbar: Search & Filters */}
+      <div className="p-4 rounded-xl bg-app-surface border border-app-border flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
+        <div className="relative flex-1">
+          <Search className="h-4 w-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search documents by name, title, department..."
+            className="w-full pl-9 pr-4 py-2 rounded-lg bg-app-surface2 border border-app-border text-xs text-slate-200 placeholder:text-slate-400 focus:outline-none focus:border-brand-primary/50"
+          />
+        </div>
 
-        {/* Department Filter */}
-        <select
-          value={deptFilter}
-          onChange={(e) => setDeptFilter(e.target.value)}
-          className="bg-black border border-dark-800 rounded px-2.5 py-1 text-neutral-200 text-xs font-mono focus:outline-none focus:border-accent-orange"
-        >
-          <option value="">ALL DEPARTMENTS</option>
-          <option value="HR">HR / Human Resources</option>
-          <option value="IT">IT & Security</option>
-          <option value="Finance">Finance</option>
-          <option value="Engineering">Engineering</option>
-          <option value="Sales">Sales</option>
-        </select>
+        <div className="flex flex-wrap items-center gap-2.5">
+          {/* Format Filter */}
+          <select
+            value={typeFilter}
+            onChange={(e) => setTypeFilter(e.target.value)}
+            className="px-3 py-2 rounded-lg bg-app-surface2 border border-app-border text-xs text-slate-200 focus:outline-none focus:border-brand-primary/50"
+          >
+            <option value="">All Formats</option>
+            <option value="pdf">PDF</option>
+            <option value="html">HTML</option>
+            <option value="md">Markdown (.md)</option>
+            <option value="txt">Text (.txt)</option>
+          </select>
 
-        {/* Format Filter */}
-        <select
-          value={typeFilter}
-          onChange={(e) => setTypeFilter(e.target.value)}
-          className="bg-black border border-dark-800 rounded px-2.5 py-1 text-neutral-200 text-xs font-mono focus:outline-none focus:border-accent-orange"
-        >
-          <option value="">ALL FORMATS</option>
-          <option value="pdf">PDF</option>
-          <option value="html">HTML</option>
-          <option value="md">MARKDOWN (.md)</option>
-          <option value="txt">PLAIN TEXT (.txt)</option>
-        </select>
+          {/* Department Filter */}
+          <select
+            value={deptFilter}
+            onChange={(e) => setDeptFilter(e.target.value)}
+            className="px-3 py-2 rounded-lg bg-app-surface2 border border-app-border text-xs text-slate-200 focus:outline-none focus:border-brand-primary/50"
+          >
+            <option value="">All Departments</option>
+            <option value="HR">Human Resources</option>
+            <option value="IT">IT Security</option>
+            <option value="Finance">Finance</option>
+            <option value="Engineering">Engineering</option>
+          </select>
 
-        {/* Status Filter */}
-        <select
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-          className="bg-black border border-dark-800 rounded px-2.5 py-1 text-neutral-200 text-xs font-mono focus:outline-none focus:border-accent-orange"
-        >
-          <option value="">ALL STATUSES</option>
-          <option value="indexed">INDEXED</option>
-          <option value="processing">PROCESSING</option>
-          <option value="failed">FAILED</option>
-        </select>
-
-        <span className="ml-auto text-neutral-400 font-mono text-[11px]">
-          SHOWING {filteredDocs.length} OF {total} DOCS
-        </span>
+          {/* Status Filter */}
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="px-3 py-2 rounded-lg bg-app-surface2 border border-app-border text-xs text-slate-200 focus:outline-none focus:border-brand-primary/50"
+          >
+            <option value="">All Statuses</option>
+            <option value="indexed">Indexed</option>
+            <option value="processing">Processing</option>
+            <option value="failed">Failed</option>
+          </select>
+        </div>
       </div>
 
       {/* Documents Table */}
-      <div className="rounded bg-dark-900 border border-dark-800 overflow-hidden">
+      <div className="rounded-xl bg-app-surface border border-app-border overflow-hidden shadow-subtle">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs text-neutral-300">
-            <thead className="bg-black border-b border-dark-800 text-neutral-400 uppercase text-[10px] tracking-wider font-mono font-bold">
-              <tr>
+          <table className="w-full text-left text-xs">
+            <thead>
+              <tr className="border-b border-app-border bg-app-surface2/40 text-slate-400 text-[11px] font-medium">
                 <th className="py-3 px-4">Document</th>
-                <th className="py-3 px-4">Type</th>
-                <th className="py-3 px-4">Department</th>
-                <th className="py-3 px-4">Team</th>
-                <th className="py-3 px-4">Version</th>
-                <th className="py-3 px-4">Effective</th>
-                <th className="py-3 px-4">Chunks</th>
-                <th className="py-3 px-4">Status</th>
+                <th className="py-3 px-3">Format</th>
+                <th className="py-3 px-3">Department</th>
+                <th className="py-3 px-3">Team</th>
+                <th className="py-3 px-3">Version</th>
+                <th className="py-3 px-3">Uploaded</th>
+                <th className="py-3 px-3">Status</th>
                 <th className="py-3 px-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-dark-800/60 font-mono">
+            <tbody className="divide-y divide-app-borderSubtle">
               {filteredDocs.length > 0 ? (
                 filteredDocs.map((doc) => (
-                  <tr key={doc.id} className="hover:bg-dark-850 transition-colors">
-                    {/* Name */}
-                    <td className="py-3 px-4 font-sans">
-                      <div className="font-bold text-white">{doc.document_title || doc.filename}</div>
-                      <div className="text-[11px] text-neutral-500 font-mono">{doc.filename}</div>
+                  <tr key={doc.id} className="hover:bg-app-surface2/40 transition-colors">
+                    <td className="py-3.5 px-4">
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 rounded-lg bg-app-surface2 border border-app-border text-brand-primary">
+                          <FileText className="h-4 w-4" />
+                        </div>
+                        <div className="flex flex-col min-w-0">
+                          <span className="font-medium text-slate-200 truncate max-w-[240px]" title={doc.filename}>
+                            {doc.filename}
+                          </span>
+                          {doc.document_title && (
+                            <span className="text-[11px] text-slate-400 truncate max-w-[240px]">
+                              {doc.document_title}
+                            </span>
+                          )}
+                        </div>
+                      </div>
                     </td>
 
-                    {/* Format */}
-                    <td className="py-3 px-4">
-                      <span className="uppercase text-[9px] font-mono px-1.5 py-0.5 rounded bg-black text-accent-orange border border-neutral-700 font-bold">
+                    <td className="py-3.5 px-3">
+                      <span
+                        className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase border ${
+                          doc.file_type === 'pdf'
+                            ? 'bg-status-errorBg text-status-error border-status-error/30'
+                            : doc.file_type === 'html'
+                            ? 'bg-status-warningBg text-status-warning border-status-warning/30'
+                            : doc.file_type === 'md'
+                            ? 'bg-brand-primary/15 text-brand-highlight border-brand-primary/30'
+                            : 'bg-app-surface2 text-slate-300 border-app-border'
+                        }`}
+                      >
                         {doc.file_type}
                       </span>
                     </td>
 
-                    {/* Dept */}
-                    <td className="py-3 px-4 text-neutral-300">{doc.department || '—'}</td>
-
-                    {/* Team */}
-                    <td className="py-3 px-4 text-neutral-400">{doc.team || 'All'}</td>
-
-                    {/* Version */}
-                    <td className="py-3 px-4 text-accent-orange font-bold">{doc.document_version || 'v1.0'}</td>
-
-                    {/* Date */}
-                    <td className="py-3 px-4 text-neutral-400">{doc.effective_date || '—'}</td>
-
-                    {/* Chunks */}
-                    <td className="py-3 px-4">
-                      <span className="px-2 py-0.5 rounded bg-black text-white border border-dark-800 font-bold">
-                        {doc.chunk_count}
-                      </span>
+                    <td className="py-3.5 px-3 text-slate-300">{doc.department || '—'}</td>
+                    <td className="py-3.5 px-3 text-slate-400">{doc.team || '—'}</td>
+                    <td className="py-3.5 px-3 font-mono text-slate-300">{doc.document_version || 'v1.0'}</td>
+                    <td className="py-3.5 px-3 text-slate-400 font-mono text-[11px]">
+                      {doc.upload_timestamp ? new Date(doc.upload_timestamp).toLocaleDateString() : '—'}
                     </td>
 
-                    {/* Status */}
-                    <td className="py-3 px-4">
+                    <td className="py-3.5 px-3">
                       <span
-                        className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase inline-flex items-center gap-1 border ${
+                        className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-medium capitalize ${
                           doc.processing_status === 'indexed'
-                            ? 'bg-black text-white border-neutral-700'
+                            ? 'bg-status-successBg text-status-success border border-status-success/30'
                             : doc.processing_status === 'processing'
-                            ? 'bg-accent-orange/10 text-accent-orange border-accent-orange/30 animate-pulse'
-                            : 'bg-accent-red/10 text-accent-red border-accent-red/30'
+                            ? 'bg-brand-primary/15 text-brand-highlight border border-brand-primary/30 animate-pulse'
+                            : 'bg-status-errorBg text-status-error border border-status-error/30'
                         }`}
                       >
+                        <span
+                          className={`h-1.5 w-1.5 rounded-full ${
+                            doc.processing_status === 'indexed'
+                              ? 'bg-status-success'
+                              : doc.processing_status === 'processing'
+                              ? 'bg-brand-primary'
+                              : 'bg-status-error'
+                          }`}
+                        />
                         {doc.processing_status}
                       </span>
                     </td>
 
-                    {/* Actions */}
-                    <td className="py-3 px-4 text-right">
+                    <td className="py-3.5 px-4 text-right">
                       <div className="flex items-center justify-end gap-1.5">
                         <button
                           onClick={() => handleInspectChunks(doc)}
-                          className="p-1.5 rounded hover:bg-neutral-800 text-neutral-400 hover:text-white transition-colors"
+                          className="p-1.5 rounded-lg hover:bg-app-surface2 text-slate-400 hover:text-white transition-colors"
                           title="Inspect chunks"
                         >
-                          <Eye className="h-4 w-4" />
+                          <Layers className="h-4 w-4" />
                         </button>
                         <button
                           onClick={() => handleReindex(doc.id)}
-                          className="p-1.5 rounded hover:bg-neutral-800 text-neutral-400 hover:text-accent-orange transition-colors"
+                          className="p-1.5 rounded-lg hover:bg-app-surface2 text-slate-400 hover:text-brand-highlight transition-colors"
                           title="Re-index document"
                         >
                           <RefreshCw className="h-4 w-4" />
                         </button>
                         <button
                           onClick={() => handleDelete(doc.id, doc.filename)}
-                          className="p-1.5 rounded hover:bg-neutral-800 text-neutral-400 hover:text-accent-red transition-colors"
+                          className="p-1.5 rounded-lg hover:bg-app-surface2 text-slate-400 hover:text-status-error transition-colors"
                           title="Delete document"
                         >
                           <Trash2 className="h-4 w-4" />
@@ -273,8 +315,8 @@ export const DocumentsPage: React.FC = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={9} className="py-12 text-center text-neutral-500 font-mono">
-                    {loading ? 'SYNCING REPOSITORY...' : 'NO DOCUMENTS MATCH QUERY.'}
+                  <td colSpan={8} className="py-12 text-center text-slate-400 text-xs">
+                    {loading ? 'Loading documents...' : 'No documents matched your filters.'}
                   </td>
                 </tr>
               )}
@@ -283,76 +325,70 @@ export const DocumentsPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Chunks Inspection Modal */}
+      {/* Chunks Inspection Slide-Over / Modal */}
       {selectedDoc && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-dark-900 border border-dark-800 rounded-lg w-full max-w-4xl max-h-[85vh] flex flex-col shadow-2xl">
-            {/* Modal Header */}
-            <div className="p-4 border-b border-dark-800 flex items-center justify-between bg-black/40">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-app-surface border border-app-border rounded-2xl w-full max-w-3xl max-h-[85vh] flex flex-col shadow-elevated overflow-hidden">
+            <div className="p-5 border-b border-app-border flex items-center justify-between">
               <div>
-                <h3 className="font-bold text-white text-sm uppercase flex items-center gap-2 font-mono">
-                  <Layers className="h-4 w-4 text-accent-orange" />
-                  Chunk Decomposition — {selectedDoc.filename}
+                <div className="text-[11px] font-mono text-brand-highlight uppercase tracking-wider">
+                  Document Chunks Inspection
+                </div>
+                <h3 className="text-base font-semibold text-white mt-0.5">
+                  {selectedDoc.filename} ({chunks.length} chunks)
                 </h3>
-                <p className="text-xs text-neutral-400 mt-0.5">
-                  Heading trace, boundary overlap & isolate metadata
-                </p>
               </div>
               <button
                 onClick={() => setSelectedDoc(null)}
-                className="p-1.5 rounded hover:bg-neutral-800 text-neutral-400 hover:text-white"
+                className="p-1.5 rounded-lg hover:bg-app-surface2 text-slate-400 hover:text-white"
               >
-                <X className="h-4 w-4" />
+                <X className="h-5 w-5" />
               </button>
             </div>
 
-            {/* Modal Body */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-3 font-mono">
+            <div className="p-5 overflow-y-auto space-y-3 flex-1">
               {loadingChunks ? (
-                <div className="py-12 text-center text-neutral-500 text-xs">
-                  LOADING PASSAGES...
+                <div className="py-12 text-center text-slate-400 text-xs font-mono">
+                  Loading structure-aware chunks...
                 </div>
               ) : chunks.length > 0 ? (
-                chunks.map((chunk, idx) => (
+                chunks.map((chk, idx) => (
                   <div
-                    key={chunk.id}
-                    className="p-3.5 rounded bg-black border border-dark-800 space-y-2 text-xs"
+                    key={chk.id || idx}
+                    className="p-3.5 rounded-xl bg-app-surface2 border border-app-border text-xs space-y-2"
                   >
-                    <div className="flex items-center justify-between text-neutral-400">
-                      <div className="flex items-center gap-2">
-                        <span className="h-5 w-5 rounded bg-accent-orange text-black flex items-center justify-center font-black text-[10px]">
-                          {idx + 1}
+                    <div className="flex items-center justify-between text-[11px] font-mono text-slate-400 border-b border-app-borderSubtle pb-2">
+                      <span className="text-brand-highlight font-semibold">
+                        Chunk #{chk.chunk_index}
+                      </span>
+                      {chk.section_title && (
+                        <span className="truncate max-w-[300px] text-slate-300">
+                          § {chk.section_title}
                         </span>
-                        {chunk.section_title && (
-                          <span className="font-bold text-white font-sans">
-                            § {chunk.section_title}
-                          </span>
-                        )}
-                        {chunk.page_number && (
-                          <span className="px-1.5 py-0.5 rounded bg-neutral-800 text-neutral-300 text-[10px]">
-                            Page {chunk.page_number}
-                          </span>
-                        )}
-                      </div>
-                      <span className="text-[10px] text-neutral-500">ID: {chunk.id.substring(0, 8)}</span>
+                      )}
+                      {chk.page_number && (
+                        <span className="px-1.5 py-0.2 rounded bg-app-elevated text-slate-300">
+                          p. {chk.page_number}
+                        </span>
+                      )}
                     </div>
-
-                    <p className="text-neutral-200 leading-relaxed font-sans bg-dark-950 p-3 rounded border border-dark-800">
-                      {chunk.original_text}
-                    </p>
-
-                    <div className="flex items-center gap-4 text-[10px] text-neutral-500 pt-1">
-                      {chunk.document_version && <span>Version: <b className="text-accent-orange">{chunk.document_version}</b></span>}
-                      {chunk.effective_date && <span>Effective: <b>{chunk.effective_date}</b></span>}
-                      {chunk.department && <span>Dept: <b>{chunk.department}</b></span>}
-                    </div>
+                    <p className="text-slate-200 leading-relaxed font-sans">{chk.original_text}</p>
                   </div>
                 ))
               ) : (
-                <div className="py-12 text-center text-neutral-500 text-xs">
-                  NO CHUNKS RECORDED.
+                <div className="py-12 text-center text-slate-400 text-xs">
+                  No chunks generated for this document.
                 </div>
               )}
+            </div>
+
+            <div className="p-4 border-t border-app-border bg-app-surface flex justify-end">
+              <button
+                onClick={() => setSelectedDoc(null)}
+                className="px-4 py-2 rounded-lg bg-app-surface2 hover:bg-app-elevated border border-app-border text-xs text-slate-200"
+              >
+                Close
+              </button>
             </div>
           </div>
         </div>

@@ -4,13 +4,17 @@ import {
   Layers,
   AlertTriangle,
   Clock,
-  CheckCircle2,
-  XCircle,
   ArrowUpRight,
   RefreshCw,
   FileType,
-  Flame,
-  ShieldAlert
+  Sparkles,
+  ShieldCheck,
+  CheckCircle2,
+  Cpu,
+  Database,
+  ArrowRight,
+  TrendingUp,
+  Search
 } from 'lucide-react';
 import { fetchStats } from '../services/api';
 import { SystemStats } from '../types';
@@ -35,203 +39,356 @@ export const OverviewPage: React.FC<{ onNavigate: (tab: string) => void }> = ({ 
     loadStats();
   }, []);
 
+  const todayStr = new Intl.DateTimeFormat('en-US', {
+    weekday: 'long',
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  }).format(new Date());
+
   return (
-    <div className="max-w-7xl mx-auto space-y-6">
-      {/* Title */}
-      <div className="flex items-center justify-between border-b border-dark-800 pb-4">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-[11px] font-mono uppercase tracking-widest text-accent-orange font-bold">
-              Team Doomsday // Command Center
+    <div className="max-w-7xl mx-auto space-y-8 font-sans">
+      {/* Workspace Header */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-app-border">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-mono font-medium text-brand-highlight px-2 py-0.5 rounded bg-brand-primary/10 border border-brand-primary/20">
+              {todayStr}
             </span>
+            <span className="text-xs text-slate-400">• Enterprise Workspace</span>
           </div>
-          <h2 className="text-2xl font-black uppercase tracking-tight text-white">Doomsday Enterprise Telemetry</h2>
-          <p className="text-xs text-neutral-400">
-            Real-time status of document ingestion, hybrid vector indices, and policy contradiction detectors
+          <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-white">
+            Good morning, welcome to your workspace.
+          </h1>
+          <p className="text-sm text-slate-400">
+            Your enterprise knowledge intelligence at a glance.
           </p>
         </div>
-        <button
-          onClick={loadStats}
-          disabled={loading}
-          className="flex items-center gap-2 px-3.5 py-1.5 rounded-md bg-dark-850 hover:bg-neutral-800 border border-dark-800 text-xs font-mono font-semibold text-neutral-200 transition-colors"
-        >
-          <RefreshCw className={`h-3.5 w-3.5 ${loading ? 'animate-spin text-accent-orange' : ''}`} />
-          SYNC TELEMETRY
-        </button>
+
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => onNavigate('chat')}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-brand-primary to-brand-secondary hover:opacity-95 text-white text-xs font-medium transition-all shadow-glow-subtle"
+          >
+            <Sparkles className="h-3.5 w-3.5" />
+            <span>Ask AI Assistant</span>
+          </button>
+
+          <button
+            onClick={loadStats}
+            disabled={loading}
+            className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-app-surface hover:bg-app-surface2 border border-app-border text-xs font-medium text-slate-300 transition-colors"
+            title="Refresh statistics"
+          >
+            <RefreshCw className={`h-3.5 w-3.5 text-slate-400 ${loading ? 'animate-spin text-brand-primary' : ''}`} />
+            <span className="hidden sm:inline">Sync Telemetry</span>
+          </button>
+        </div>
       </div>
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* 4 Premium KPI Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Total Documents */}
-        <div className="p-4 rounded-lg bg-dark-900 border border-dark-800 flex items-center justify-between">
-          <div className="space-y-1">
-            <span className="text-[11px] font-mono text-neutral-400 font-semibold uppercase tracking-wider">Total Documents</span>
-            <div className="text-3xl font-black text-white">{stats?.total_documents ?? 0}</div>
-            <div className="flex items-center gap-1.5 text-[11px] font-mono text-neutral-400">
-              <span className="text-accent-orange font-bold">{stats?.indexed_documents ?? 0} INDEXED</span>
-              {stats?.failed_documents ? (
-                <span className="text-accent-red flex items-center gap-1">
-                  / {stats.failed_documents} FAILED
-                </span>
-              ) : null}
+        <div className="group p-5 rounded-card bg-app-surface border border-app-border hover:border-app-borderHover transition-all shadow-subtle hover:shadow-elevated">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-medium text-slate-400">Total Documents</span>
+            <div className="p-2 rounded-lg bg-app-surface2 border border-app-border text-brand-primary group-hover:scale-105 transition-transform">
+              <FileText className="h-4 w-4" />
             </div>
           </div>
-          <div className="p-3 rounded bg-black border border-dark-800 text-accent-orange">
-            <FileText className="h-6 w-6" />
+          <div className="mt-4 flex items-baseline gap-2">
+            <span className="text-3xl font-semibold tracking-tight text-white">
+              {stats?.total_documents ?? 0}
+            </span>
+            <span className="text-xs text-slate-400 font-mono">files</span>
+          </div>
+          <div className="mt-3 flex items-center gap-2 text-xs">
+            <span className="text-status-success font-medium flex items-center gap-1">
+              <CheckCircle2 className="h-3.5 w-3.5" />
+              {stats?.indexed_documents ?? 0} indexed
+            </span>
+            {stats?.failed_documents ? (
+              <span className="text-status-error font-medium">
+                • {stats.failed_documents} failed
+              </span>
+            ) : null}
           </div>
         </div>
 
-        {/* Total Chunks */}
-        <div className="p-4 rounded-lg bg-dark-900 border border-dark-800 flex items-center justify-between">
-          <div className="space-y-1">
-            <span className="text-[11px] font-mono text-neutral-400 font-semibold uppercase tracking-wider">Vector Chunks</span>
-            <div className="text-3xl font-black text-white">{stats?.total_chunks ?? 0}</div>
-            <div className="text-[11px] font-mono text-neutral-500">HEADING-AWARE SPLIT</div>
+        {/* Knowledge Chunks */}
+        <div className="group p-5 rounded-card bg-app-surface border border-app-border hover:border-app-borderHover transition-all shadow-subtle hover:shadow-elevated">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-medium text-slate-400">Indexed Knowledge Chunks</span>
+            <div className="p-2 rounded-lg bg-app-surface2 border border-app-border text-brand-secondary group-hover:scale-105 transition-transform">
+              <Layers className="h-4 w-4" />
+            </div>
           </div>
-          <div className="p-3 rounded bg-black border border-dark-800 text-white">
-            <Layers className="h-6 w-6" />
+          <div className="mt-4 flex items-baseline gap-2">
+            <span className="text-3xl font-semibold tracking-tight text-white">
+              {stats?.total_chunks ?? 0}
+            </span>
+            <span className="text-xs text-slate-400 font-mono">chunks</span>
+          </div>
+          <div className="mt-3 flex items-center gap-2 text-xs text-slate-400">
+            <span className="font-mono text-[11px] text-brand-highlight">Structure-aware chunking</span>
           </div>
         </div>
 
         {/* Detected Conflicts */}
-        <div className="p-4 rounded-lg bg-dark-900 border border-dark-800 flex items-center justify-between">
-          <div className="space-y-1">
-            <span className="text-[11px] font-mono text-neutral-400 font-semibold uppercase tracking-wider">Policy Conflicts</span>
-            <div className="text-3xl font-black text-accent-red">{stats?.detected_conflicts ?? 0}</div>
-            <div className="text-[11px] font-mono text-accent-red/90 font-semibold">VERSION & SCOPE CONFLICTS</div>
+        <div className="group p-5 rounded-card bg-app-surface border border-app-border hover:border-app-borderHover transition-all shadow-subtle hover:shadow-elevated">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-medium text-slate-400">Detected Conflicts</span>
+            <div className="p-2 rounded-lg bg-status-warningBg border border-status-warning/30 text-status-warning group-hover:scale-105 transition-transform">
+              <AlertTriangle className="h-4 w-4" />
+            </div>
           </div>
-          <div className="p-3 rounded bg-accent-red/10 border border-accent-red/30 text-accent-red">
-            <AlertTriangle className="h-6 w-6" />
+          <div className="mt-4 flex items-baseline gap-2">
+            <span className="text-3xl font-semibold tracking-tight text-status-warning">
+              {stats?.detected_conflicts ?? 0}
+            </span>
+            <span className="text-xs text-slate-400 font-mono">policies</span>
+          </div>
+          <div className="mt-3 flex items-center gap-2 text-xs">
+            <button
+              onClick={() => onNavigate('conflicts')}
+              className="text-status-warning hover:underline font-medium flex items-center gap-1"
+            >
+              Review matrix <ArrowRight className="h-3 w-3" />
+            </button>
           </div>
         </div>
 
-        {/* Avg Latency */}
-        <div className="p-4 rounded-lg bg-dark-900 border border-dark-800 flex items-center justify-between">
-          <div className="space-y-1">
-            <span className="text-[11px] font-mono text-neutral-400 font-semibold uppercase tracking-wider">Retrieval Latency</span>
-            <div className="text-3xl font-black text-accent-orange">
-              {stats?.avg_retrieval_latency_ms ? `${stats.avg_retrieval_latency_ms}` : '320'} <span className="text-sm font-mono text-neutral-400">ms</span>
+        {/* Total Queries */}
+        <div className="group p-5 rounded-card bg-app-surface border border-app-border hover:border-app-borderHover transition-all shadow-subtle hover:shadow-elevated">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-medium text-slate-400">Total Queries</span>
+            <div className="p-2 rounded-lg bg-app-surface2 border border-app-border text-brand-highlight group-hover:scale-105 transition-transform">
+              <TrendingUp className="h-4 w-4" />
             </div>
-            <div className="text-[11px] font-mono text-neutral-500">RRF FUSION + RERANK</div>
           </div>
-          <div className="p-3 rounded bg-black border border-dark-800 text-accent-orange">
-            <Clock className="h-6 w-6" />
+          <div className="mt-4 flex items-baseline gap-2">
+            <span className="text-3xl font-semibold tracking-tight text-white">
+              {stats?.total_queries ?? 0}
+            </span>
+            <span className="text-xs text-slate-400 font-mono">inquiries</span>
+          </div>
+          <div className="mt-3 flex items-center gap-2 text-xs text-slate-400">
+            <span className="flex items-center gap-1 font-mono text-[11px]">
+              <Clock className="h-3 w-3 text-slate-400" />
+              Avg latency: {stats?.avg_retrieval_latency_ms ? `${stats.avg_retrieval_latency_ms} ms` : '320 ms'}
+            </span>
           </div>
         </div>
       </div>
 
-      {/* Two columns: Supported Formats & Pipeline Architecture */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Formats Card */}
-        <div className="p-5 rounded-lg bg-dark-900 border border-dark-800 space-y-4">
-          <div className="border-b border-dark-800 pb-3">
-            <h3 className="text-sm font-bold uppercase tracking-wider text-white flex items-center gap-2">
-              <FileType className="h-4 w-4 text-accent-orange" />
-              Supported Formats (FR-01)
-            </h3>
-            <p className="text-[11px] text-neutral-400 mt-1">
-              Deterministic parsing preserving heading hierarchies & page references
-            </p>
-          </div>
-
-          <div className="space-y-2">
-            {[
-              { ext: 'PDF', name: 'Document Manuals', parser: 'pdfplumber / PyMuPDF', badge: 'Page Citations' },
-              { ext: 'HTML', name: 'Web Portals & Guides', parser: 'BeautifulSoup4 + LXML', badge: 'Tags Sanitized' },
-              { ext: 'MD', name: 'Markdown Handbooks', parser: 'Heading Hierarchy Engine', badge: 'H1-H6 Tree' },
-              { ext: 'TXT', name: 'Plain Text Policies', parser: 'Section Heuristic Extractor', badge: 'Normalized' },
-            ].map((f) => (
-              <div key={f.ext} className="p-2.5 rounded bg-black/60 border border-dark-800 flex items-center justify-between">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-neutral-800 text-accent-orange border border-neutral-700">
-                      .{f.ext.toLowerCase()}
-                    </span>
-                    <span className="text-xs font-bold text-neutral-200 uppercase">{f.name}</span>
-                  </div>
-                  <div className="text-[10px] text-neutral-500 font-mono mt-0.5">{f.parser}</div>
-                </div>
-                <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-neutral-900 text-neutral-300 border border-dark-800">
-                  {f.badge}
-                </span>
+      {/* Main Two-Column Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        {/* Left Column: Recent Activity & Ingestion Table (7 cols) */}
+        <div className="lg:col-span-7 space-y-6">
+          {/* Recently Uploaded Documents */}
+          <div className="rounded-card bg-app-surface border border-app-border p-5 space-y-4 shadow-subtle">
+            <div className="flex items-center justify-between border-b border-app-border pb-3.5">
+              <div>
+                <h2 className="text-sm font-semibold text-white">Recent Documents</h2>
+                <p className="text-xs text-slate-400 mt-0.5">
+                  Latest enterprise policies indexed into the knowledge vault
+                </p>
               </div>
-            ))}
-          </div>
+              <button
+                onClick={() => onNavigate('documents')}
+                className="text-xs font-medium text-brand-highlight hover:text-white flex items-center gap-1 transition-colors"
+              >
+                View Library <ArrowUpRight className="h-3.5 w-3.5" />
+              </button>
+            </div>
 
-          <button
-            onClick={() => onNavigate('upload')}
-            className="w-full mt-2 py-2.5 rounded bg-accent-orange hover:bg-accent-orange-hover text-black text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-md shadow-accent-orange/20"
-          >
-            Upload Enterprise Documents
-            <ArrowUpRight className="h-4 w-4 stroke-[2.5]" />
-          </button>
+            {stats?.recent_uploads && stats.recent_uploads.length > 0 ? (
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs">
+                  <thead>
+                    <tr className="border-b border-app-border text-slate-400 text-[11px] font-medium">
+                      <th className="pb-2.5 font-normal">Document</th>
+                      <th className="pb-2.5 font-normal">Department</th>
+                      <th className="pb-2.5 font-normal">Version</th>
+                      <th className="pb-2.5 font-normal">Chunks</th>
+                      <th className="pb-2.5 font-normal text-right">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-app-borderSubtle">
+                    {stats.recent_uploads.slice(0, 5).map((doc) => (
+                      <tr key={doc.id} className="group hover:bg-app-surface2/60 transition-colors">
+                        <td className="py-3 pr-2">
+                          <div className="flex items-center gap-2.5">
+                            <span
+                              className={`px-1.5 py-0.5 rounded text-[10px] font-mono font-medium uppercase ${
+                                doc.file_type === 'pdf'
+                                  ? 'bg-status-errorBg text-status-error border border-status-error/30'
+                                  : doc.file_type === 'html'
+                                  ? 'bg-status-warningBg text-status-warning border border-status-warning/30'
+                                  : doc.file_type === 'md'
+                                  ? 'bg-brand-primary/15 text-brand-highlight border border-brand-primary/30'
+                                  : 'bg-app-surface2 text-slate-300 border border-app-border'
+                              }`}
+                            >
+                              {doc.file_type}
+                            </span>
+                            <span className="font-medium text-slate-200 truncate max-w-[200px]" title={doc.filename}>
+                              {doc.filename}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="py-3 text-slate-400 text-xs">{doc.department || '—'}</td>
+                        <td className="py-3 font-mono text-xs text-slate-300">{doc.document_version || 'v1.0'}</td>
+                        <td className="py-3 font-mono text-xs text-slate-400">{doc.chunk_count}</td>
+                        <td className="py-3 text-right">
+                          <span
+                            className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-medium capitalize ${
+                              doc.processing_status === 'indexed'
+                                ? 'bg-status-successBg text-status-success border border-status-success/30'
+                                : doc.processing_status === 'processing'
+                                ? 'bg-brand-primary/15 text-brand-highlight border border-brand-primary/30 animate-pulse'
+                                : 'bg-status-errorBg text-status-error border border-status-error/30'
+                            }`}
+                          >
+                            <span
+                              className={`h-1.5 w-1.5 rounded-full ${
+                                doc.processing_status === 'indexed'
+                                  ? 'bg-status-success'
+                                  : doc.processing_status === 'processing'
+                                  ? 'bg-brand-primary'
+                                  : 'bg-status-error'
+                              }`}
+                            />
+                            {doc.processing_status}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <div className="py-8 text-center text-slate-400 text-xs">
+                No documents found. Start by uploading documents from the{' '}
+                <button
+                  onClick={() => onNavigate('upload')}
+                  className="text-brand-highlight hover:underline font-medium"
+                >
+                  Upload
+                </button>{' '}
+                tab.
+              </div>
+            )}
+
+            <div className="pt-2">
+              <button
+                onClick={() => onNavigate('upload')}
+                className="w-full py-2.5 rounded-lg bg-app-surface2 hover:bg-app-elevated border border-app-border text-xs font-medium text-slate-200 flex items-center justify-center gap-2 transition-colors"
+              >
+                <span>Upload New Documents</span>
+                <ArrowRight className="h-3.5 w-3.5 text-slate-400" />
+              </button>
+            </div>
+          </div>
         </div>
 
-        {/* Recent Ingestion Table */}
-        <div className="lg:col-span-2 p-5 rounded-lg bg-dark-900 border border-dark-800 space-y-4">
-          <div className="flex items-center justify-between border-b border-dark-800 pb-3">
-            <div>
-              <h3 className="text-sm font-bold uppercase tracking-wider text-white flex items-center gap-2">
-                <FileText className="h-4 w-4 text-accent-orange" />
-                Indexed Repository Corpus
-              </h3>
-              <p className="text-[11px] text-neutral-400 mt-0.5">
-                Doomsday Enterprise policy documents and manuals
+        {/* Right Column: Knowledge Distribution & Architecture (5 cols) */}
+        <div className="lg:col-span-5 space-y-6">
+          {/* Supported Formats Card */}
+          <div className="rounded-card bg-app-surface border border-app-border p-5 space-y-4 shadow-subtle">
+            <div className="border-b border-app-border pb-3.5">
+              <h2 className="text-sm font-semibold text-white flex items-center gap-2">
+                <FileType className="h-4 w-4 text-brand-primary" />
+                <span>Multi-Format Ingestion Engine</span>
+              </h2>
+              <p className="text-xs text-slate-400 mt-0.5">
+                Preserves heading hierarchies, tables, and page metadata
               </p>
             </div>
-            <button
-              onClick={() => onNavigate('documents')}
-              className="text-xs font-mono font-bold uppercase text-accent-orange hover:underline flex items-center gap-1"
-            >
-              Full Library <ArrowUpRight className="h-3 w-3" />
-            </button>
+
+            <div className="space-y-2.5">
+              {[
+                {
+                  ext: 'PDF',
+                  name: 'Document Manuals',
+                  engine: 'pdfplumber / PyMuPDF',
+                  badge: 'Page Citations',
+                  color: 'text-status-error border-status-error/30 bg-status-errorBg',
+                },
+                {
+                  ext: 'HTML',
+                  name: 'Portals & Web Guides',
+                  engine: 'BeautifulSoup4 + LXML',
+                  badge: 'DOM Sanitized',
+                  color: 'text-status-warning border-status-warning/30 bg-status-warningBg',
+                },
+                {
+                  ext: 'MD',
+                  name: 'Markdown Handbooks',
+                  engine: 'Heading Hierarchy Parser',
+                  badge: 'H1-H6 Tree',
+                  color: 'text-brand-highlight border-brand-primary/30 bg-brand-primary/15',
+                },
+                {
+                  ext: 'TXT',
+                  name: 'Plain Text Policies',
+                  engine: 'Regex Heuristic Extractor',
+                  badge: 'Normalized',
+                  color: 'text-slate-300 border-app-border bg-app-surface2',
+                },
+              ].map((f) => (
+                <div
+                  key={f.ext}
+                  className="p-3 rounded-lg bg-app-surface2/60 border border-app-border flex items-center justify-between"
+                >
+                  <div className="flex items-center gap-3">
+                    <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase border ${f.color}`}>
+                      .{f.ext.toLowerCase()}
+                    </span>
+                    <div>
+                      <div className="text-xs font-medium text-slate-200">{f.name}</div>
+                      <div className="text-[10px] text-slate-400 font-mono">{f.engine}</div>
+                    </div>
+                  </div>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-app-elevated border border-app-border text-slate-300">
+                    {f.badge}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
 
-          {stats?.recent_uploads && stats.recent_uploads.length > 0 ? (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs text-neutral-300">
-                <thead className="border-b border-dark-800 text-neutral-500 font-mono uppercase text-[10px]">
-                  <tr>
-                    <th className="pb-2">Document</th>
-                    <th className="pb-2">Dept</th>
-                    <th className="pb-2">Version</th>
-                    <th className="pb-2">Chunks</th>
-                    <th className="pb-2">Status</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-dark-800/60 font-mono">
-                  {stats.recent_uploads.map((doc) => (
-                    <tr key={doc.id} className="hover:bg-dark-850 transition-colors">
-                      <td className="py-2.5 font-sans font-semibold text-neutral-100 flex items-center gap-2">
-                        <span className="uppercase text-[9px] font-mono px-1 py-0.2 rounded bg-black text-accent-orange border border-neutral-700">
-                          {doc.file_type}
-                        </span>
-                        <span className="truncate max-w-[220px]" title={doc.filename}>{doc.filename}</span>
-                      </td>
-                      <td className="py-2.5 text-neutral-400">{doc.department || '—'}</td>
-                      <td className="py-2.5 text-accent-orange font-bold">{doc.document_version || 'v1.0'}</td>
-                      <td className="py-2.5">{doc.chunk_count}</td>
-                      <td className="py-2.5">
-                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase border ${
-                          doc.processing_status === 'indexed'
-                            ? 'bg-black text-white border-neutral-700'
-                            : doc.processing_status === 'processing'
-                            ? 'bg-accent-orange/10 text-accent-orange border-accent-orange/30 animate-pulse'
-                            : 'bg-accent-red/10 text-accent-red border-accent-red/30'
-                        }`}>
-                          {doc.processing_status}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+          {/* System Health & Security Telemetry Card */}
+          <div className="rounded-card bg-app-surface border border-app-border p-5 space-y-3.5 shadow-subtle">
+            <h2 className="text-sm font-semibold text-white flex items-center gap-2">
+              <ShieldCheck className="h-4 w-4 text-status-success" />
+              <span>Security & Groundedness Assurance</span>
+            </h2>
+
+            <div className="space-y-2 text-xs">
+              <div className="flex items-center justify-between p-2.5 rounded-lg bg-app-surface2/60 border border-app-border">
+                <span className="text-slate-300">Prompt Injection Defense</span>
+                <span className="text-status-success font-medium font-mono text-[11px] flex items-center gap-1.5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-status-success" />
+                  100% Defense Active
+                </span>
+              </div>
+
+              <div className="flex items-center justify-between p-2.5 rounded-lg bg-app-surface2/60 border border-app-border">
+                <span className="text-slate-300">Hybrid Search Engine</span>
+                <span className="text-brand-highlight font-medium font-mono text-[11px]">
+                  FAISS + BM25Okapi
+                </span>
+              </div>
+
+              <div className="flex items-center justify-between p-2.5 rounded-lg bg-app-surface2/60 border border-app-border">
+                <span className="text-slate-300">Evidence Verification</span>
+                <span className="text-slate-200 font-medium font-mono text-[11px]">
+                  Strict Citation Grounding
+                </span>
+              </div>
             </div>
-          ) : (
-            <div className="py-12 text-center text-neutral-500 text-xs font-mono">
-              No documents indexed. Ingest policies from <span className="text-accent-orange underline cursor-pointer" onClick={() => onNavigate('upload')}>Upload</span> to initialize the repository.
-            </div>
-          )}
+          </div>
         </div>
       </div>
     </div>
