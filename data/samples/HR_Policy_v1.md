@@ -1,4 +1,4 @@
-# Nexora Technologies — HR Policy Handbook
+# Doomsday Enterprise — HR Policy Handbook
 
 ## Version: 1.0
 ## Department: Human Resources
@@ -11,7 +11,7 @@
 
 ### 1.1 Leave Entitlement
 
-All full-time employees of Nexora Technologies are entitled to **18 days of paid annual leave** per calendar year.
+All full-time employees of Doomsday Enterprise are entitled to **18 days of paid annual leave** per calendar year.
 
 ### 1.2 Leave Accumulation
 

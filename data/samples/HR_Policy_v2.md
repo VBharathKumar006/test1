@@ -1,4 +1,4 @@
-# Nexora Technologies — HR Policy Handbook
+# Doomsday Enterprise — HR Policy Handbook
 
 ## Version: 2.0
 ## Department: Human Resources
@@ -11,7 +11,7 @@
 
 ### 1.1 Leave Entitlement
 
-All full-time employees of Nexora Technologies are entitled to **20 days of paid annual leave** per calendar year, effective from the date of joining.
+All full-time employees of Doomsday Enterprise are entitled to **20 days of paid annual leave** per calendar year, effective from the date of joining.
 
 Part-time employees receive a pro-rated leave entitlement based on their contracted hours.
 
@@ -46,7 +46,7 @@ A medical certificate is required for sick leave exceeding 2 consecutive days. T
 
 ### 3.1 General Remote Work Guidelines
 
-Nexora Technologies supports a hybrid work model. Employees are permitted to work remotely **up to 3 days per week**, subject to business requirements and manager approval.
+Doomsday Enterprise supports a hybrid work model. Employees are permitted to work remotely **up to 3 days per week**, subject to business requirements and manager approval.
 
 ### 3.2 Remote Work Equipment
 
@@ -88,5 +88,5 @@ Employees must not disclose confidential company information, client data, or pr
 
 ---
 
-*This document supersedes HR Policy v1.0 dated March 15, 2022. For queries, contact: hr@nexora.example.com*
+*This document supersedes HR Policy v1.0 dated March 15, 2022. For queries, contact: hr@doomsday.example.com*
 

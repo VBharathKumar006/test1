@@ -215,7 +215,7 @@
 ## Phase 8 — Evaluation Framework & Benchmark Dataset
 
 ### Tasks
-- [ ] Nexora Technologies synthetic document set (8+ docs, 4 formats)
+- [ ] Doomsday Enterprise synthetic document set (8+ docs, 4 formats)
 - [ ] Labelled evaluation dataset (50+ questions, 10 categories)
 - [ ] Retrieval evaluation script (P@K, R@K, MRR, nDCG)
 - [ ] Answer quality evaluation script

@@ -194,7 +194,7 @@ async def run_benchmark(top_k: int = 5):
     # Write REPORT.md
     report_content = f"""# Enterprise Documentation Q&A Assistant — Evaluation Report
 
-> **Dataset:** Nexora Technologies Synthetic Benchmark (55 Labelled Questions)  
+> **Dataset:** Doomsday Enterprise Synthetic Benchmark (55 Labelled Questions)  
 > **Evaluation Date:** {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S UTC')}  
 > **Target Requirement:** FR-08 (Retrieval & Answer Quality Verification)
 

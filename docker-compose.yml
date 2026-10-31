@@ -5,7 +5,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: nexora-docai-backend
+    container_name: doomsday-docai-backend
     ports:
       - "8000:8000"
     environment:
@@ -23,7 +23,7 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: nexora-docai-frontend
+    container_name: doomsday-docai-frontend
     ports:
       - "5173:80"
     depends_on:

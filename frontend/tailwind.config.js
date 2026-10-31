@@ -7,22 +7,28 @@ export default {
   theme: {
     extend: {
       colors: {
-        brand: {
-          50: '#f0f7ff',
-          100: '#e0effe',
-          200: '#bae0fd',
-          300: '#7cc7fb',
-          400: '#36abf7',
-          500: '#0c8fe9',
-          600: '#0171c7',
-          700: '#025aa1',
-          800: '#064c84',
-          900: '#0a406e',
-          950: '#072849',
+        dark: {
+          950: '#09090b', // True black
+          900: '#121215', // Main surface
+          850: '#18181c', // Card surface
+          800: '#26262b', // Borders
+          700: '#3f3f46', // Muted borders
+          600: '#52525b',
+          500: '#71717a',
         },
+        accent: {
+          orange: '#f97316',
+          'orange-hover': '#ea580c',
+          'orange-glow': 'rgba(249, 115, 22, 0.15)',
+          red: '#ef4444',
+          'red-hover': '#dc2626',
+          'red-glow': 'rgba(239, 68, 68, 0.15)',
+        },
+      },
+      fontFamily: {
+        mono: ['JetBrains Mono', 'Menlo', 'Monaco', 'Courier New', 'monospace'],
       },
     },
   },
   plugins: [],
 }
-

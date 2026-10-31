@@ -1,4 +1,4 @@
-# Nexora Technologies — Engineering Team Policy
+# Doomsday Enterprise — Engineering Team Policy
 
 ## Version: 1.2
 ## Department: Engineering
@@ -77,5 +77,5 @@ For engineering development and testing environments, the standard 180-day passw
 
 ---
 
-*For Engineering policy queries, contact: eng-manager@nexora.example.com*
+*For Engineering policy queries, contact: eng-manager@doomsday.example.com*
 

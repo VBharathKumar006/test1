@@ -1,4 +1,4 @@
-NEXORA TECHNOLOGIES — IT ACCESS POLICY v1.0
+DOOMSDAY ENTERPRISE — IT ACCESS POLICY v1.0
 
 Department: IT Security
 Version: 1.0
@@ -12,7 +12,7 @@ Status: SUPERSEDED by IT Access Policy v2.1
 
 1.1 New Account Requests
 All access requests must be submitted to IT Helpdesk via email at
-helpdesk@nexora.example.com. Approvals are provided within 5 business days.
+helpdesk@doomsday.example.com. Approvals are provided within 5 business days.
 
 1.2 VPN Access
 VPN access requires manager approval via email submission to IT Helpdesk.
@@ -47,7 +47,7 @@ Only company-issued laptops may access internal systems.
 =============================================================
 
 Security incidents must be reported to IT Security within 24 hours.
-Contact: security@nexora.example.com
+Contact: security@doomsday.example.com
 
 =============================================================
 

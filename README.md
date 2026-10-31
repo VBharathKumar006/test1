@@ -1,8 +1,8 @@
-# Enterprise Documentation Q&A Assistant
+# Doomsday Enterprise — Knowledge & Documentation Q&A Assistant
 
-> **HCLTech Future Ready AI Engineer Hackathon — Use Case 2**
-> Built by: [Your Team Name]
-> Company: Nexora Technologies (Synthetic Demo Dataset)
+> **HCLTech Future Ready AI Engineer Hackathon — Use Case 2**  
+> **Team: Doomsday**  
+> **Enterprise: Doomsday Enterprise**
 
 ---
 
@@ -414,11 +414,9 @@ See [evaluation/REPORT.md](evaluation/REPORT.md) for full results.
 
 | Name | Role |
 |---|---|
-| [Team Member 1] | AI/RAG Engineer |
-| [Team Member 2] | Backend Developer |
-| [Team Member 3] | Frontend Developer |
+| Team Doomsday | AI/RAG, Full-Stack & System Architecture |
 
 ---
 
-*This project uses a synthetic dataset (Nexora Technologies) for demonstration purposes. It does not contain or represent actual HCLTech internal policies.*
+*This project is built for Doomsday Enterprise for demonstration purposes.*
 

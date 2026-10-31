@@ -1,6 +1,6 @@
 # Enterprise Documentation Q&A Assistant — Evaluation Report
 
-> **Dataset:** Nexora Technologies Synthetic Benchmark (55 Labelled Questions)  
+> **Dataset:** Doomsday Enterprise Benchmark (55 Labelled Questions)  
 > **Evaluation Date:** 2026-10-31 06:24:02 UTC  
 > **Target Requirement:** FR-08 (Retrieval & Answer Quality Verification)
 

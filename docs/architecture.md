@@ -1,7 +1,7 @@
 # System Architecture & Technical Specification
 
 > **Project:** Enterprise Documentation Q&A Assistant  
-> **Company Context:** Nexora Technologies  
+> **Company Context:** Doomsday Enterprise  
 > **Engineering Scope:** Grounded RAG, Conflict Detection, Prompt Injection Defense
 
 ---

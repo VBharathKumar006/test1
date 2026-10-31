@@ -1,7 +1,9 @@
 # Architecture and Technical Decisions
 
-> **Project:** Enterprise Documentation Q&A Assistant
-> **Hackathon:** HCLTech Future Ready AI Engineer
+> **Project:** Doomsday Enterprise — Knowledge & Documentation Q&A Assistant  
+> **Team:** Doomsday  
+> **Enterprise:** Doomsday Enterprise  
+> **Hackathon:** HCLTech Future Ready AI Engineer  
 > **Last Updated:** 2026-10-31
 
 ---
@@ -415,6 +417,37 @@ Offline evaluation with labelled ground truth is the gold standard. Retrieval me
 - Semantic quality metrics still require LLM judge
 
 **Impact:** Evaluation credibility, development feedback loop.
+
+---
+
+## Decision 016 — Industrial UI Design & Visual Identity (White, Black, Orange, Red | Team Doomsday)
+
+**Date:** 2026-10-31
+**Category:** Frontend & Visual Identity
+**Status:** Accepted
+
+**Context:**
+Generic AI assistant interfaces frequently rely on soft pastel blue/indigo gradients, rounded bubble cards, and standard "chatbot" aesthetics that appear generic and AI-generated. The system requires an authentic, industrial-grade enterprise look and feel representing **Team Doomsday** and **Doomsday Enterprise**.
+
+**Decision:**
+Redesign the interface using a high-contrast industrial palette:
+- **Base Canvas:** Deep blacks (`#09090b`, `#121215`, `#18181b`) and dark zinc.
+- **Typography:** Pure white (`#ffffff`) for primary text and high legibility, with muted zinc for secondary telemetry.
+- **Accents:** High-visibility safety orange (`#f97316`) for primary interactive actions, active navigation tabs, and citation pills.
+- **Alerts & Conflicts:** Signal red (`#ef4444`) for contradiction warnings, adversarial threat detections, and high-severity policy conflicts.
+- **Enterprise Identity:** Unified naming under **Doomsday Enterprise** and authorship under **Team Doomsday**.
+
+**Alternatives considered:**
+- Standard corporate slate/blue theme — felt generic and looked like boilerplate AI chatbot templates.
+- Minimal monochrome only — lacked visual urgency needed for security warnings and version conflict notifications.
+
+**Reason for selection:**
+White, black, orange, and red establish a purposeful, mission-critical operations dashboard aesthetic ("Command Center") that sets this enterprise tool apart from consumer AI chatbots while maximizing contrast, citation readability, and policy conflict visibility.
+
+**Trade-offs:**
+- Requires careful handling of orange/red accent usage so visual alarms do not overwhelm normal navigation.
+
+**Impact:** Frontend components, tailwind configuration, user experience, branding consistency.
 
 ---
 

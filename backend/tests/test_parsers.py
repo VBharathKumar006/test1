@@ -32,7 +32,7 @@ def test_html_parser():
     assert len(parsed.sections) >= 1
 
 def test_txt_parser():
-    content = """NEXORA TECHNOLOGIES FINANCE POLICY
+    content = """DOOMSDAY ENTERPRISE FINANCE POLICY
 
 1. REIMBURSEMENT LIMITS
 Hotel accommodation is capped at $250 per night.

@@ -1,4 +1,4 @@
-NEXORA TECHNOLOGIES — FINANCE AND REIMBURSEMENT POLICY
+DOOMSDAY ENTERPRISE — FINANCE AND REIMBURSEMENT POLICY
 
 Version: 3.0
 Department: Finance
@@ -21,7 +21,7 @@ up to the following limits:
   - Mileage (personal vehicle): $0.67 per mile
 
 All claims must be submitted within 30 days of travel via the Finance
-Portal at finance.nexora.example.com.
+Portal at finance.doomsday.example.com.
 
 1.2 International Travel
 
@@ -70,7 +70,7 @@ up to $50 per month for business phone usage.
 3. TRAINING AND CERTIFICATION REIMBURSEMENT
 =============================================================
 
-Nexora Technologies reimburses employees for approved professional
+Doomsday Enterprise reimburses employees for approved professional
 development activities:
 
   - Professional certifications: Up to $2,000 per year
@@ -104,6 +104,6 @@ least 5 business days before travel. Unused advances must be
 returned within 5 business days of returning from travel.
 
 =============================================================
-Contact: finance@nexora.example.com
+Contact: finance@doomsday.example.com
 =============================================================
 
