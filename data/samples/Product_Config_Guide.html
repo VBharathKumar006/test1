@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Nexora Cloud Platform — Product Configuration Guide</title>
+    <meta name="version" content="4.2">
+    <meta name="department" content="Engineering">
+    <meta name="category" content="manual">
+</head>
+<body>
+
+<h1>Nexora Cloud Platform — Configuration and Troubleshooting Guide</h1>
+
+<p><strong>Version:</strong> 4.2 | <strong>Last Updated:</strong> October 2024</p>
+
+<h2>1. Account Setup</h2>
+
+<h3>1.1 Creating Your Account</h3>
+<p>To create a Nexora Cloud account:</p>
+<ol>
+    <li>Navigate to <strong>cloud.nexora.example.com</strong></li>
+    <li>Click <em>Create Account</em></li>
+    <li>Enter your company email address</li>
+    <li>Complete MFA enrollment</li>
+    <li>Contact your IT administrator to link your account to your organization</li>
+</ol>
+
+<h3>1.2 Usage Limits</h3>
+<p>Default account limits for Nexora Cloud Standard tier:</p>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Resource</th>
+            <th>Standard Tier</th>
+            <th>Enterprise Tier</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>API calls per minute</td>
+            <td>100</td>
+            <td>1,000</td>
+        </tr>
+        <tr>
+            <td>Storage (GB)</td>
+            <td>100</td>
+            <td>Unlimited</td>
+        </tr>
+        <tr>
+            <td>Compute instances</td>
+            <td>10</td>
+            <td>500</td>
+        </tr>
+        <tr>
+            <td>Data transfer (GB/month)</td>
+            <td>500</td>
+            <td>Unlimited</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>2. API Configuration</h2>
+
+<h3>2.1 API Key Management</h3>
+<p>API keys are generated from the <strong>Account Settings → API Keys</strong> section. Each key has a configurable expiry period (default: 90 days). Store API keys securely and never commit them to source code repositories.</p>
+
+<h3>2.2 Authentication</h3>
+<p>All API calls must include the Authorization header:</p>
+<pre>Authorization: Bearer YOUR_API_KEY</pre>
+
+<h2>3. Billing</h2>
+
+<h3>3.1 Billing Cycle</h3>
+<p>Billing is calculated monthly. Invoices are generated on the <strong>1st of each month</strong> for the previous month's usage.</p>
+
+<h3>3.2 Payment Methods</h3>
+<p>Nexora Cloud accepts credit card, bank transfer, and purchase order for enterprise accounts.</p>
+
+<h3>3.3 Overage Charges</h3>
+<p>Usage exceeding tier limits is charged at the following rates:</p>
+<ul>
+    <li>API calls: $0.001 per call above limit</li>
+    <li>Storage: $0.02 per GB above limit</li>
+    <li>Data transfer: $0.05 per GB above limit</li>
+</ul>
+
+<h2>4. Troubleshooting</h2>
+
+<h3>4.1 Common Error Codes</h3>
+<table border="1">
+    <thead>
+        <tr>
+            <th>Error Code</th>
+            <th>Description</th>
+            <th>Resolution</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>401</td>
+            <td>Unauthorized</td>
+            <td>Check API key validity and Authorization header format</td>
+        </tr>
+        <tr>
+            <td>429</td>
+            <td>Rate limit exceeded</td>
+            <td>Implement exponential backoff; consider upgrading tier</td>
+        </tr>
+        <tr>
+            <td>503</td>
+            <td>Service unavailable</td>
+            <td>Check status.nexora.example.com for outage information</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3>4.2 Connection Issues</h3>
+<p>If you cannot connect to the Nexora Cloud API:</p>
+<ol>
+    <li>Verify your internet connection</li>
+    <li>Check that your IP is not blocklisted (contact support)</li>
+    <li>Ensure your firewall allows outbound connections on port 443</li>
+    <li>Check the API status page at status.nexora.example.com</li>
+</ol>
+
+<h2>5. Support</h2>
+<p>For technical support, contact: support@nexora.example.com<br>
+Enterprise support hotline: +1-800-NEXORA-1 (available 24/7 for Enterprise tier)</p>
+
+</body>
+</html>
+

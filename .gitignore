@@ -1,0 +1,63 @@
+# Dependencies
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+.env
+*.egg-info/
+dist/
+build/
+
+# Data (do not commit uploaded documents or generated indexes)
+data/uploads/*
+data/processed/*
+data/vector_store/*
+!data/uploads/.gitkeep
+!data/processed/.gitkeep
+!data/vector_store/.gitkeep
+!data/samples/
+
+# SQLite databases
+*.db
+*.sqlite
+
+# Frontend
+node_modules/
+frontend/dist/
+frontend/.env
+
+# Environment
+.env
+.env.local
+.env.production
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Test artifacts
+.pytest_cache/
+htmlcov/
+.coverage
+coverage.xml
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Evaluation results (large files)
+evaluation/results/*.json
+evaluation/results/*.csv
+

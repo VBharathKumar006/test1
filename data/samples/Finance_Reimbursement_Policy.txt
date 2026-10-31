@@ -1,0 +1,109 @@
+NEXORA TECHNOLOGIES — FINANCE AND REIMBURSEMENT POLICY
+
+Version: 3.0
+Department: Finance
+Effective Date: January 1, 2024
+Document Status: Active
+
+=============================================================
+1. TRAVEL REIMBURSEMENT
+=============================================================
+
+1.1 Domestic Travel
+
+Employees may claim reimbursement for domestic business travel expenses
+up to the following limits:
+
+  - Economy flights: Actual cost (no limit, economy class only)
+  - Hotel accommodation: Maximum $150 per night
+  - Daily meal allowance: $50 per day
+  - Ground transportation: Actual cost with receipts
+  - Mileage (personal vehicle): $0.67 per mile
+
+All claims must be submitted within 30 days of travel via the Finance
+Portal at finance.nexora.example.com.
+
+1.2 International Travel
+
+International travel reimbursement limits are higher to account for
+cost-of-living variations:
+
+  - Business class flights: Permitted for flights exceeding 8 hours
+  - Economy class flights: Required for flights under 8 hours
+  - Hotel accommodation: Maximum $250 per night
+  - Daily meal allowance: $80 per day
+  - Ground transportation: Actual cost with receipts
+
+All international travel requires pre-approval from the department head
+and Finance team before booking.
+
+1.3 Expenses Not Eligible for Reimbursement
+
+The following expenses are NOT reimbursable:
+  - Alcohol and entertainment for personal purposes
+  - Minibar charges
+  - Personal items and clothing
+  - Speeding fines or parking violations
+  - Travel insurance for personal travel
+
+=============================================================
+2. EQUIPMENT REIMBURSEMENT
+=============================================================
+
+2.1 Home Office Equipment
+
+Employees approved for permanent remote work may claim reimbursement
+for home office equipment up to $500 per year. This includes:
+  - Monitor
+  - Keyboard and mouse
+  - Desk accessories
+  - Ergonomic equipment
+
+Receipts are required for all claims.
+
+2.2 Mobile Phone Reimbursement
+
+Employees who use personal mobile phones for work purposes may claim
+up to $50 per month for business phone usage.
+
+=============================================================
+3. TRAINING AND CERTIFICATION REIMBURSEMENT
+=============================================================
+
+Nexora Technologies reimburses employees for approved professional
+development activities:
+
+  - Professional certifications: Up to $2,000 per year
+  - Online courses and training: Up to $500 per year
+  - Industry conferences: Up to $3,000 per year (requires manager approval)
+
+Employees must remain with the company for at least 6 months following
+certification reimbursement. If an employee leaves before this period,
+50% of the reimbursement may be clawed back.
+
+=============================================================
+4. EXPENSE SUBMISSION PROCESS
+=============================================================
+
+1. Submit all expense claims through the Finance Portal within 30 days.
+2. Attach all receipts (PDF or clear photograph).
+3. Obtain manager approval in the portal.
+4. Finance processes approved claims within 10 business days.
+5. Reimbursements are made via payroll in the next pay cycle.
+
+Claims submitted after 30 days will not be processed without a
+written exception request approved by the Finance Director.
+
+=============================================================
+5. ADVANCE PAYMENTS
+=============================================================
+
+Employees may request a travel advance for international travel
+expenses exceeding $1,000. Advance requests must be submitted at
+least 5 business days before travel. Unused advances must be
+returned within 5 business days of returning from travel.
+
+=============================================================
+Contact: finance@nexora.example.com
+=============================================================
+

@@ -1,0 +1,58 @@
+NEXORA TECHNOLOGIES — IT ACCESS POLICY v1.0
+
+Department: IT Security
+Version: 1.0
+Effective Date: July 1, 2022
+Status: SUPERSEDED by IT Access Policy v2.1
+
+=============================================================
+
+1. ACCOUNT ACCESS MANAGEMENT
+=============================================================
+
+1.1 New Account Requests
+All access requests must be submitted to IT Helpdesk via email at
+helpdesk@nexora.example.com. Approvals are provided within 5 business days.
+
+1.2 VPN Access
+VPN access requires manager approval via email submission to IT Helpdesk.
+
+=============================================================
+
+2. PASSWORD POLICY
+=============================================================
+
+2.1 Password Rotation
+All passwords must be changed every 90 days. Failure to comply will result
+in automatic account lockout.
+
+2.2 Password Complexity
+- Minimum 8 characters
+- Must include at least one uppercase letter
+- Must include at least one number
+
+2.3 Multi-Factor Authentication
+MFA is recommended but optional for non-administrative accounts.
+
+=============================================================
+
+3. DEVICE MANAGEMENT
+=============================================================
+
+Only company-issued laptops may access internal systems.
+
+=============================================================
+
+4. INCIDENT REPORTING
+=============================================================
+
+Security incidents must be reported to IT Security within 24 hours.
+Contact: security@nexora.example.com
+
+=============================================================
+
+NOTE: This document has been superseded. Refer to IT Access Policy v2.1
+for current policies.
+
+=============================================================
+
